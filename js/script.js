@@ -19,9 +19,18 @@ newGameBtn.addEventListener('click', function(){
 	resultWindow.innerHTML = "0:0";
 	computerScore = 0;
 	playerScore = 0;
+	gameOver = false;
 	
 });
 
+var buttons = document.querySelectorAll('.player-move');
+for(var i = 0; i < buttons.length; i++){
+	buttons[i].addEventListener('click', function(){
+		var getMove = this.buttons.getAttribute(data-move);
+		playerMove(getMove);
+	})
+}
+/*
 rockBtn.addEventListener('click', function(){
 	playerMove('rock');
 });
@@ -31,7 +40,7 @@ paperBtn.addEventListener('click', function(){
 scissorsBtn.addEventListener('click', function(){
 	playerMove('scissor');
 });
-
+*/
 function computerMove(){
 	var move = Math.round(Math.random() * 2) + 1;
 	if (move == 1){
