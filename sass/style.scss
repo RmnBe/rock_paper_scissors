@@ -77,12 +77,47 @@ button {
     }
 }
 #output {
-    border: 1px gray solid;
     height: 50px;
     padding: 20px;
 }
 .score {
-    border: 1px gray solid;
     font-size: 2.5em;
     font-weight: bold;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    
+    &.show {
+        display: block;
+    }
+}
+
+.modal {
+    background: #fff;
+    min-width: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    padding: 20px 20px 40px;
+    font-weight: bold;
+    font-size: 2em;
+    overflow: auto;
+    
+    .close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 5px;
+        color: #000;
+        text-decoration: none;
+        font-size: 1em;
+        font-weight: normal;
+    }
 }

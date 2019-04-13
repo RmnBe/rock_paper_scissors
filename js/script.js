@@ -1,4 +1,14 @@
 'use strict';
+var params = {
+	round : 0,
+	playerScore : 0,
+	computerScore : 0,
+	totalRounds : 0,
+	gameOver : false,
+	progres : [],
+	winner : 'no one',
+};
+
 var rockBtn = document.getElementById('rock-btn');
 var paperBtn = document.getElementById('paper-btn');
 var scissorsBtn = document.getElementById('scissors-btn');
@@ -7,22 +17,18 @@ var outputWindow = document.getElementById('output');
 var resultWindow = document.getElementById('result');
 var roundsWindow = document.getElementById('rounds');
 
-var playerScore = 0;
-var computerScore = 0;
-var totalRounds = 0;
-var gameOver = false;
-
 newGameBtn.addEventListener('click', function(){
-	totalRounds = window.prompt('Podaj ilość wygranych rund potrzebnych do zakończenia gry!');
-	roundsWindow.innerHTML = totalRounds;
+	params.totalRounds = window.prompt('Podaj ilość wygranych rund potrzebnych do zakończenia gry!');
+	roundsWindow.innerHTML = params.totalRounds;
 	outputWindow.innerHTML = "Let's play!";
 	resultWindow.innerHTML = "0:0";
-	computerScore = 0;
-	playerScore = 0;
-	gameOver = false;
+	params.computerScore = 0;
+	params.playerScore = 0;
+	params.round = 0;
+	params.gameOver = false;
 	
 });
-
+/*
 var buttons = document.querySelectorAll('.player-move');
 for(var i = 0; i < buttons.length; i++){
 	buttons[i].addEventListener('click', function(){
@@ -30,7 +36,8 @@ for(var i = 0; i < buttons.length; i++){
 		playerMove(getMove);
 	})
 }
-/*
+*/
+
 rockBtn.addEventListener('click', function(){
 	playerMove('rock');
 });
@@ -40,7 +47,7 @@ paperBtn.addEventListener('click', function(){
 scissorsBtn.addEventListener('click', function(){
 	playerMove('scissor');
 });
-*/
+
 function computerMove(){
 	var move = Math.round(Math.random() * 2) + 1;
 	if (move == 1){
@@ -57,42 +64,50 @@ function computerMove(){
 function playerMove(choice){
 	var playerMove = choice;
 	var compMove = computerMove();
-	console.log(playerMove);
-	console.log(compMove);
+	params.round ++;
 	
-	if (gameOver == false){
+	if (params.gameOver == false){
 		if (playerMove =='rock' && compMove == 'rock') {
 		outputWindow.innerHTML = "It's a tie! You played Rock and computer also played Rock.";
+		params.winner = 'No one';
 		}
 		else if (playerMove == 'rock' && compMove == 'paper') {
 			outputWindow.innerHTML = "You lose! Paper covers rock."
-			computerScore = computerScore + 1;
+			params.computerScore = params.computerScore + 1;
+			params.winner = 'Computer';
 		}
 		else if (playerMove == 'rock' && compMove == 'scissor') {
 			outputWindow.innerHTML = "You won! Rock crushes scissors."
-			playerScore = playerScore + 1;
+			params.playerScore = params.playerScore + 1;
+			params.winner = 'Player';
 		}
 		else if (playerMove == 'paper' && compMove == 'rock') {
 			outputWindow.innerHTML = 'You won! Paper covers rock'
-			playerScore = playerScore + 1;
+			params.playerScore = params.playerScore + 1;
+			params.winner = 'Player';
 		}
 		else if (playerMove == 'paper' && compMove == 'paper') {
 			outputWindow.innerHTML = "It's a tie! You played Paper and computer also played Paper."
+			params.winner = 'No one';
 		}
 		else if (playerMove == 'paper' && compMove == 'scissor') {
 			outputWindow.innerHTML = 'You lose! Scissors cuts paper.'
-			computerScore = computerScore + 1;
+			params.computerScore = params.computerScore + 1;
+			params.winner = 'Computer';
 		}
 		else if (playerMove == 'scissor' && compMove == 'rock') {
 			outputWindow.innerHTML = 'You lose! Rock crushes scissors.'
-			computerScore = computerScore + 1;
+			params.computerScore = params.computerScore + 1;
+			params.winner = 'Computer';
 		}
 		else if (playerMove == 'scissor' && compMove == 'paper') {
 			outputWindow.innerHTML = 'You won! Scissors cuts paper.'
-			playerScore = playerScore + 1;
+			params.playerScore = params.playerScore + 1;
+			params.winner = 'Player';
 		}
 		else if (playerMove == 'scissor' && compMove == 'scissor') {
 			outputWindow.innerHTML = "It's a tie! You played Scissor and computer also played Scissor."
+			params.winner = 'No one';
 		}
 	}
 	else {
@@ -100,92 +115,64 @@ function playerMove(choice){
 	}
 	refreshResults();
 	checkRounds();
-	console.log(playerScore);
-	console.log(computerScore);
-	console.log(totalRounds);
-}
-function refreshResults(){
-	resultWindow.innerHTML = playerScore +":"+ computerScore;
-}
-function checkRounds(){
-	if (totalRounds == playerScore || totalRounds == computerScore){
-		if (playerScore > computerScore){
-			outputWindow.innerHTML = outputWindow.innerHTML + "<br>" + " End of game. You won! " + playerScore + ":" + computerScore;
-			gameOver = true;
-		}
-		else if (playerScore < computerScore){
-			outputWindow.innerHTML = outputWindow.innerHTML + "<br>" + " End of game. You lose! " + playerScore + ":" + computerScore;
-			gameOver = true;
-		}
-}
-}
 	
 
+	console.log(params.round);
+	console.log(playerMove);
+	console.log(compMove);
+	console.log(params.playerScore);
+	console.log(params.computerScore);
+	console.log(params.winner);
 
+	pushParams();
+	//console.log(params.progres);
+}
 
+function pushParams(){
+	params.progres.push({
+		round : params.round,
+		player_move : playerMove,
+		computer_move : compMove,
+		result : params.playerScore + " : " + params.compScore,
+		last_winner : params.winner, 
+	});
+}
+function refreshResults(){
+	resultWindow.innerHTML = params.playerScore +":"+ params.computerScore;
+}
+function checkRounds(){
+	if (params.totalRounds == params.playerScore || params.totalRounds == params.computerScore){
+		params.gameOver = true;
+		showModal();
+		if (params.playerScore > params.computerScore){
+			scoreModal.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. You won! " + params.playerScore + ":" + params.computerScore;
+		}
+		else if (params.playerScore < params.computerScore){
+			scoreModal.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. You lose! " + params.playerScore + ":" + params.computerScore;
+		}
+		outputWindow.innerHTML = "   ";
+}
+}
 
-	/*if (totalRounds < 1) {
-		outputWindow.innerHTML = "End of game!"; 
+var showModal = function(event){
+		document.querySelector('#modal-overlay').classList.add('show');
+};
+
+var hideModal = function(event){
+		event.preventDefault();
+		document.querySelector('#modal-overlay').classList.remove('show');
+};
+	
+var closeButtons = document.querySelectorAll('.modal .close');
+	for(var i = 0; i < closeButtons.length; i++){
+	closeButtons[i].addEventListener('click', hideModal);
+}
+	
+document.querySelector('#modal-overlay').addEventListener('click', hideModal);
+	
+var modals = document.querySelectorAll('.modal');
+	for(var i = 0; i < modals.length; i++){
+		modals[i].addEventListener('click', function(event){
+			event.stopPropagation();
+		});
 	}
-	else if (totalRounds == 1 && playerScore == computerScore) {
-		outputWindow.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. It's a tie";
-		totalRounds = totalRounds - 1;
-	}
-	else if (totalRounds == 1 && playerScore > computerScore) {
-		outputWindow.innerHTML = outputWindow.innerHTML + "<br>" + " End of game. You won! " + playerScore + ":" + computerScore;
-		totalRounds = totalRounds - 1;
-	}
-	else if (totalRounds == 1 && playerScore < computerScore) {
-		outputWindow.innerHTML = outputWindow.innerHTML + "<br>" + " End of game. You lose! " + playerScore + ":" + computerScore;
-		totalRounds = totalRounds - 1;
-	}*/
-
-
-
-
-
-
-
-/*rockBtn.addEventListener('click', function(){
-	var compMove = Math.round(Math.random() * 2) + 1;/*rock1,paper2,scissor3
-	if (compMove == 1) {outputWindow.innerHTML = "It's a tie! You played Rock and computer also played Rock."}
-	else if (compMove == 2) {outputWindow.innerHTML = "You lose! Paper covers rock."}
-	else if (compMove == 3) {outputWindow.innerHTML = "You won! Rock crushes scissors."}
-});
-paperBtn.addEventListener('click', function(){
-	var compMove = Math.round(Math.random() * 2) + 1;
-	if (compMove == 1) {outputWindow.innerHTML = "You won! Paper Paper covers rock."}
-	else if (compMove == 2) {outputWindow.innerHTML = "It's a tie! You played Paper and computer also played Paper."}
-	else if (compMove == 3) {outputWindow.innerHTML = "You lose! Scissors cuts paper."}
-});
-scissorsBtn.addEventListener('click', function(){
-	var compMove = Math.round(Math.random() * 2) + 1;
-	if (compMove == 1) {outputWindow.innerHTML = "You lose! Rock crushes scissors."}
-	else if (compMove == 2) {outputWindow.innerHTML = "You won! Scissors cuts paper."}
-	else if (compMove == 3) {outputWindow.innerHTML = "It's a tie. You played scissors and computer also played scissors"}
-});*/
-
-
-
-/*
-rockBtn.addEventListener('click', function(){
-	playerMove('rock');
-});
-paperBtn.addEventListener('click', function(){
-	playerMove('paper');
-});
-scissorsBtn.addEventListener('click', function(){
-	playerMove('scissors');
-});
-function playerMove(){
-	var compMove = function() {Math.round(Math.random() * 2) + 1}/*rock1,paper2,scissor3*/
-/*	if (playerMove = rock || compMove = 1) {outputWindow.innerHTML = "It's a tie! You played Rock and computer also played Rock."}
-	else if (playerMove = rock || compMove = 2) {outputWindow.innerHTML = "You lose! Paper covers rock."}
-	else if (playerMove = rock || compMove = 3) {outputWindow.innerHTML = "You won! Rock crushes scissors."}
-	else if (playerMove = paper || compMove = 1) {outputWindow.innerHTML = "You won! Paper Paper covers rock."}
-	else if (playerMove = paper || compMove = 2) {outputWindow.innerHTML = "It's a tie! You played Paper and computer also played Paper."}
-	else if (playerMove = paper || compMove = 3) {outputWindow.innerHTML = "You lose! Scissors cuts paper."}
-	else if (playerMove = scissors || compMove = 1) {outputWindow.innerHTML = "You lose! Rock crushes scissors."}
-	else if (playerMove = scissors || compMove = 2) {outputWindow.innerHTML = "You won! Scissors cuts paper."}
-	else if (playerMove = scissors || compMove = 3) {outputWindow.innerHTML = "It's a tie. You played scissors and computer also played scissors"}
-}*/
