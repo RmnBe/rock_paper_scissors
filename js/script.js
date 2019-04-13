@@ -125,15 +125,15 @@ function playerMove(choice){
 	console.log(params.winner);
 
 	pushParams();
-	//console.log(params.progres);
+	console.log(params.progres[params.round - 1]);
 }
 
 function pushParams(){
 	params.progres.push({
 		round : params.round,
 		player_move : playerMove,
-		computer_move : compMove,
-		result : params.playerScore + " : " + params.compScore,
+		computer_move : computerMove,
+		result : params.playerScore + " : " + params.computerScore,
 		last_winner : params.winner, 
 	});
 }
