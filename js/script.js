@@ -151,9 +151,18 @@ function checkRounds(){
 			scoreModal.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. You lose! " + params.playerScore + ":" + params.computerScore;
 		}
 		outputWindow.innerHTML = "   ";
+		//showTable();
 }
 }
+/*
+function showTable(){
+	params.progres.forEach(function(){
+	scoreModal.innerHTML = scoreModal.innerHTML + '<tr><td> ' + round + '</td><td> ' + player_move + '</td><td> ' + computer_move + '</td><td> ' + last_winner + '</td><td> ' + result + '</td></tr>''
+	});
+	
 
+}
+*/
 var showModal = function(event){
 		document.querySelector('#modal-overlay').classList.add('show');
 };
