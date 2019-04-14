@@ -9,6 +9,8 @@ var params = {
 	winner : 'no one',
 };
 
+var playerChoice;
+var computerChoice;
 var rockBtn = document.getElementById('rock-btn');
 var paperBtn = document.getElementById('paper-btn');
 var scissorsBtn = document.getElementById('scissors-btn');
@@ -26,18 +28,19 @@ newGameBtn.addEventListener('click', function(){
 	params.playerScore = 0;
 	params.round = 0;
 	params.gameOver = false;
+	params.progres = [];
 	
 });
-/*
+
 var buttons = document.querySelectorAll('.player-move');
 for(var i = 0; i < buttons.length; i++){
 	buttons[i].addEventListener('click', function(){
-		var getMove = this.buttons.getAttribute(data-move);
+		var getMove = this.getAttribute('data-move');
 		playerMove(getMove);
 	})
 }
-*/
 
+/*
 rockBtn.addEventListener('click', function(){
 	playerMove('rock');
 });
@@ -47,65 +50,65 @@ paperBtn.addEventListener('click', function(){
 scissorsBtn.addEventListener('click', function(){
 	playerMove('scissor');
 });
-
+*/
 function computerMove(){
 	var move = Math.round(Math.random() * 2) + 1;
 	if (move == 1){
-		return 'rock';
+		computerChoice = 'rock';
 	}
 	else if (move == 2){
-		return 'paper';
+		computerChoice = 'paper';
 	}
 	else {
-		return 'scissor';
+		computerChoice = 'scissor';
 	}
 }
 
 function playerMove(choice){
-	var playerMove = choice;
+	playerChoice = choice;
 	var compMove = computerMove();
 	params.round ++;
 	
 	if (params.gameOver == false){
-		if (playerMove =='rock' && compMove == 'rock') {
+		if (playerChoice =='rock' && computerChoice == 'rock') {
 		outputWindow.innerHTML = "It's a tie! You played Rock and computer also played Rock.";
 		params.winner = 'No one';
 		}
-		else if (playerMove == 'rock' && compMove == 'paper') {
+		else if (playerChoice == 'rock' && computerChoice == 'paper') {
 			outputWindow.innerHTML = "You lose! Paper covers rock."
 			params.computerScore = params.computerScore + 1;
 			params.winner = 'Computer';
 		}
-		else if (playerMove == 'rock' && compMove == 'scissor') {
+		else if (playerChoice == 'rock' && computerChoice == 'scissor') {
 			outputWindow.innerHTML = "You won! Rock crushes scissors."
 			params.playerScore = params.playerScore + 1;
 			params.winner = 'Player';
 		}
-		else if (playerMove == 'paper' && compMove == 'rock') {
+		else if (playerChoice == 'paper' && computerChoice == 'rock') {
 			outputWindow.innerHTML = 'You won! Paper covers rock'
 			params.playerScore = params.playerScore + 1;
 			params.winner = 'Player';
 		}
-		else if (playerMove == 'paper' && compMove == 'paper') {
+		else if (playerChoice == 'paper' && computerChoice == 'paper') {
 			outputWindow.innerHTML = "It's a tie! You played Paper and computer also played Paper."
 			params.winner = 'No one';
 		}
-		else if (playerMove == 'paper' && compMove == 'scissor') {
+		else if (playerChoice == 'paper' && computerChoice == 'scissor') {
 			outputWindow.innerHTML = 'You lose! Scissors cuts paper.'
 			params.computerScore = params.computerScore + 1;
 			params.winner = 'Computer';
 		}
-		else if (playerMove == 'scissor' && compMove == 'rock') {
+		else if (playerChoice == 'scissor' && computerChoice == 'rock') {
 			outputWindow.innerHTML = 'You lose! Rock crushes scissors.'
 			params.computerScore = params.computerScore + 1;
 			params.winner = 'Computer';
 		}
-		else if (playerMove == 'scissor' && compMove == 'paper') {
+		else if (playerChoice == 'scissor' && computerChoice == 'paper') {
 			outputWindow.innerHTML = 'You won! Scissors cuts paper.'
 			params.playerScore = params.playerScore + 1;
 			params.winner = 'Player';
 		}
-		else if (playerMove == 'scissor' && compMove == 'scissor') {
+		else if (playerChoice == 'scissor' && computerChoice == 'scissor') {
 			outputWindow.innerHTML = "It's a tie! You played Scissor and computer also played Scissor."
 			params.winner = 'No one';
 		}
@@ -118,8 +121,8 @@ function playerMove(choice){
 	
 
 	console.log(params.round);
-	console.log(playerMove);
-	console.log(compMove);
+	console.log(playerChoice);
+	console.log(computerChoice);
 	console.log(params.playerScore);
 	console.log(params.computerScore);
 	console.log(params.winner);
@@ -131,8 +134,8 @@ function playerMove(choice){
 function pushParams(){
 	params.progres.push({
 		round : params.round,
-		player_move : playerMove,
-		computer_move : computerMove,
+		player_move : playerChoice,
+		computer_move : computerChoice,
 		result : params.playerScore + " : " + params.computerScore,
 		last_winner : params.winner, 
 	});
@@ -145,22 +148,40 @@ function checkRounds(){
 		params.gameOver = true;
 		showModal();
 		if (params.playerScore > params.computerScore){
-			scoreModal.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. You won! " + params.playerScore + ":" + params.computerScore;
+			scoreModal.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. You won! " + params.playerScore + ":" + params.computerScore + "<br>";
 		}
 		else if (params.playerScore < params.computerScore){
-			scoreModal.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. You lose! " + params.playerScore + ":" + params.computerScore;
+			scoreModal.innerHTML = outputWindow.innerHTML + "<br>" + "End of game. You lose! " + params.playerScore + ":" + params.computerScore + "<br>";
 		}
 		outputWindow.innerHTML = "   ";
-		//showTable();
+		showTable();
 }
 }
+function showTable(){
+	scoreModal.innerHTML += '';
+	for (var i = 0; i < params.progres.length; i++) {
+    scoreModal.innerHTML +=
+      '<tr><td>' +
+      params.progres[i].round +
+      '</td><td>' +
+      params.progres[i].last_winner +
+      '</td><td>' +
+      params.progres[i].player_move+
+      '</td><td>' +
+      params.progres[i].computer_move+
+      '</td><td>' +
+      params.progres[i].round +
+      '</td></tr>' +
+      '<br>';
+  }
+}
+
+
 /*
 function showTable(){
 	params.progres.forEach(function(){
-	scoreModal.innerHTML = scoreModal.innerHTML + '<tr><td> ' + round + '</td><td> ' + player_move + '</td><td> ' + computer_move + '</td><td> ' + last_winner + '</td><td> ' + result + '</td></tr>''
+	scoreModal.innerHTML = scoreModal.innerHTML + '<tr><td> ' + round + '</td><td> ' + player_move + '</td><td> ' + computer_move + '</td><td> ' + last_winner + '</td><td> ' + result + '</td></tr>' + '<br>'
 	});
-	
-
 }
 */
 var showModal = function(event){
