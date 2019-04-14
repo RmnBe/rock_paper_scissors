@@ -116,6 +116,7 @@ function playerMove(choice){
 	else {
 		outputWindow.innerHTML = 'End of game! Press "New Game" button!'; 
 	}
+	pushParams();
 	refreshResults();
 	checkRounds();
 	
@@ -127,7 +128,7 @@ function playerMove(choice){
 	console.log(params.computerScore);
 	console.log(params.winner);
 
-	pushParams();
+	//pushParams();
 	console.log(params.progres[params.round - 1]);
 }
 
@@ -164,15 +165,12 @@ function showTable(){
       '<tr><td>' +
       params.progres[i].round +
       '</td><td>' +
-      params.progres[i].last_winner +
-      '</td><td>' +
-      params.progres[i].player_move+
+      params.progres[i].player_move +
       '</td><td>' +
       params.progres[i].computer_move+
       '</td><td>' +
-      params.progres[i].round +
-      '</td></tr>' +
-      '<br>';
+      params.progres[i].last_winner+
+      '</td></tr>';
   }
 }
 

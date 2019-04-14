@@ -122,14 +122,20 @@ button {
         font-weight: normal;
     }
     tr {
-        display: block;
+        display: inline-block;
     }
     td {
         padding: 5px;
-        width: 50px;
         text-align: center;
+        width: 25%;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: 300;
+        border: 1px solid #000;
     }
 }
-td {
-  border: 1px solid #000;
+
+table {
+    border-spacing: 0;
+    width: 100%;
 }
